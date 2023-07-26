@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .title {
+            font-size: 2rem;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">404 - Page Not Found</h1>
+        <h3>realtime chat? <a href="/chat">Here!</a></h3>
+        <p id="error-message"></p>
+    </div>
+
+    <script>
+        // Array of random 404 messages
+        const errorMessages = [
+    "Error 404: Page abducted by aliens. They have better tech than us.",
+    "Hasta la vista, baby! This page has terminated.",
+    "The code has gone rogue. This page is in hiding.",
+    "Looks like the page was sent to the upside-down. Stranger things have happened.",
+    "404 - Page not found. Looks like it went on a bender.",
+    "You've hit a glitch in the matrix. Page not found.",
+    "This page is in another castle. Keep exploring, Mario!",
+    "Error 404: Ghosts in the machine. They scared the page away.",
+    "A black hole swallowed this page. It's lost in the void.",
+    "404 - Page not found. Error level: Over 9000!",
+    "Looks like this page is vacationing in the Bermuda Triangle.",
+    "The page is on a coffee break. It'll be back with more errors soon.",
+    "Error 404: Reality.exe has crashed. Please reboot your life.",
+    "This page is in the Upside Down. Keep your wits about you, Eleven.",
+    "404 - Page not found. Elon Musk took it to Mars for testing.",
+    "Oops! We fed this page after midnight, and now it's a gremlin.",
+    "Error 404: This page is floating in cyberspace, lost forever.",
+    "Looks like a cat walked across the keyboard. Page not found.",
+    "404 - Page not found. The aliens are laughing at us.",
+    "This page is in the quantum realm. It's simultaneously here and not here.",
+    "Error 404: A time traveler accidentally stepped on this page in the past.",
+    "Looks like you've crossed into the forbidden zone. No page here.",
+    "404 - Page not found. It's on a secret mission.",
+    "This page has been Thanos-snapped out of existence.",
+    "Error 404: The page is hanging out with Bigfoot in the woods.",
+    "Looks like the page is partying in the metaverse. No invitation for you.",
+    "404 - Page not found. The hackers did a number on it.",
+    "This page joined a band and went on a world tour. No encore here.",
+    "Error 404: The page is undercover, working for the CIA.",
+    "Looks like a glitch in the simulation. This page is a mirage.",
+    "404 - Page not found. It's playing hide-and-seek with you.",
+    "This page is in a galaxy far, far away. The force isn't helping us find it.",
+    "Error 404: The page was caught in a time loop. Try again in another timeline.",
+    "Looks like you've ventured into the Upside Down. No page here.",
+];
+
+// Add as many as you like!
+
+
+        // Function to get a random error message
+        function getRandomMessage() {
+            const randomIndex = Math.floor(Math.random() * errorMessages.length);
+            return errorMessages[randomIndex];
+        }
+
+        // Update the error message on page load
+        window.onload = function () {
+            const errorMessageElement = document.getElementById("error-message");
+            const randomErrorMessage = getRandomMessage();
+            errorMessageElement.textContent = randomErrorMessage;
+        };
+    </script>
+</body>
+</html>
+

@@ -49,7 +49,9 @@ io.on('connection', (socket) => {
 });
 
 // Inject styles into index.html before starting the server
-
+app.use((req, res, next) => {
+  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
+});
 const port = 3000;
 const localIP = '0.0.0.0'
 server.listen(port, localIP, () => {
