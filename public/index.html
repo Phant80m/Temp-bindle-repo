@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-time Chat App</title>
+  <style>
+  body {
+    background-color: rgb(255, 255, 255);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    overflow-x: hidden;
+  }
+
+  .chat-container {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex: 1;
+    overflow-y: auto; /* Use scrollbar when content overflows */
+    padding: 15px;
+    word-wrap: break-word; /* Wrap long words to fit within container */
+  }
+
+  .message-wrapper {
+    margin-bottom: 10px;
+    padding: 5px; /* Add padding for each message */
+  }
+  .message-wrapper {
+      background-color: whitesmoke;
+      padding: 5px;
+      border-radius: 5px;
+  }
+
+  .Control {
+    padding: 10px;
+    border-top: solid rgba(0, 0, 0, 0.338) 2px;
+    position: sticky; /* Make it sticky */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    height: 6%;
+    align-items: center;
+    background-color: #f0f0f0;
+    z-index: 1; /* Ensure it stays above the chat messages */
+    box-shadow: rgb(255, 255, 255) 0px -50px 36px -28px inset;
+  }
+
+  input {
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 3px;
+  }
+  button {
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 3px;
+  }
+  /* Add more styles to .Control and its child elements as needed */
+  textarea:focus, input:focus{
+    outline: none;
+}
+
+#message {
+    width: 70%;
+}
+#sendButton {
+    width: 10%;
+}
+#scrollLockButton {
+    width: 10%;
+}</style>
+<body>
+  <div class="chat-container">
+    <div id="chat-messages"></div>
+  </div>
+  <div class="Control">
+    <input type="text" id="username" placeholder="Enter your username">
+    <input type="text" id="message" placeholder="Type your message">
+    <button id="sendButton">Send</button>
+    <button id="scrollLockButton">ScrollUnlock</button>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // Socket.IO connection
+    const socket = io();
+  
+    // DOM elements
+    const chatMessages = document.getElementById('chat-messages');
+    const usernameInput = document.getElementById('username');
+    const messageInput = document.getElementById('message');
+    const sendButton = document.getElementById('sendButton');
+    const scrollLockButton = document.getElementById('scrollLockButton');
+  
+    // Constants for character limits
+    const maxUsernameLength = 25;
+    const maxMessageLength = 300;
+  
+    // Variable to keep track of the scrollLock state
+    let scrollLocked = false;
+  
+    // Function to toggle scrollLock state
+    function toggleScrollLock() {
+      scrollLocked = !scrollLocked;
+      if (scrollLocked) {
+        scrollLockButton.innerText = 'ScrollLock';
+      } else {
+        scrollLockButton.innerText = 'ScrollUnlock';
+        // If scrollLock is turned off, scroll to the bottom to see new messages
+        const scrollingElement = document.scrollingElement || document.body;
+        scrollingElement.scrollTop = scrollingElement.scrollHeight;
+      }
+    }
+  
+    // Handle the "ScrollLock" button click event
+    scrollLockButton.addEventListener('click', () => {
+      toggleScrollLock();
+    });
+  
+    // Function to add a new message to the chat
+    function addMessage(username, message, timestamp) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message-wrapper');
+      messageDiv.innerHTML = `<em>(${timestamp})</em> <strong>${username}</strong>: ${message}`;
+      chatMessages.appendChild(messageDiv);
+    }
+  
+    // Load existing messages from the server
+    socket.on('loadMessages', (messages) => {
+      messages.forEach(({ username, message, timestamp }) => {
+        addMessage(username, message, timestamp);
+      });
+    });
+  
+    // Handle the "Send" button click event
+    sendButton.addEventListener('click', () => {
+      sendMessage();
+    });
+  
+    // Handle "Enter" key press in the message input field
+    messageInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent form submission
+        sendMessage();
+      }
+    });
+  
+    // Function to send a message to the server
+    function sendMessage() {
+      const username = usernameInput.value.trim().slice(0, maxUsernameLength); // Trim and limit username
+      const message = messageInput.value.trim().slice(0, maxMessageLength); // Trim and limit message
+
+      if (username && message) {
+        // Check if the message contains a link
+        const linkPattern = /(https?:\/\/[^\s]+)/;
+        if (!linkPattern.test(message)) {
+          // If the message does not contain a link, then send it to the server
+          socket.emit('sendMessage', { username, message });
+          messageInput.value = '';
+        } else {
+          alert('Messages containing links are not allowed.');
+        }
+      }
+    }
+  
+    // Handle new messages from the server
+    socket.on('newMessage', ({ username, message, timestamp }) => {
+      addMessage(username, message, timestamp);
+  
+      // Scroll to the bottom only if scrollLock is not enabled
+      if (!scrollLocked) {
+        const scrollingElement = document.scrollingElement || document.body;
+        scrollingElement.scrollTop = scrollingElement.scrollHeight;
+      }
+    });
+  </script>
+</body>
+</html>
