@@ -4,15 +4,11 @@ const path = require('path');
 const messagesFilePath = path.join(__dirname, '..', 'data', 'messages.json');
 const stylesFilePath = path.join(__dirname, '..', 'public', 'styles.css');
 
-// Step 1: Create an array of random options
 const randomOptions = [
   'Option 1',
   'Option 2',
   'Option 3',
-  // Add more random options as needed
 ];
-
-// Step 2: Modify the loadMessages and saveMessage functions
 function loadMessages() {
   return new Promise((resolve, reject) => {
     fs.readFile(messagesFilePath, 'utf8', (err, data) => {
@@ -88,25 +84,8 @@ function replaceLinksInMessages(messages) {
   return messages;
 }
 
-function getStylesCSS() {
-  return new Promise((resolve, reject) => {
-    fs.readFile(stylesFilePath, 'utf8', (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(data);
-      }
-    });
-  });
-}
-
-function injectStylesToIndexHTML() {
-  // ... (remaining code remains the same)
-}
 
 module.exports = {
   loadMessages,
   saveMessage,
-  getStylesCSS,
-  injectStylesToIndexHTML,
 };

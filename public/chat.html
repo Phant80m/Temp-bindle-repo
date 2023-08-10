@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+    
+    <title>Indium Chat</title>
+    <style>
+    </style>
+  <body>
+    <div class="chat-container">
+      <h1 class="welcome">
+        Indium Anonymous Chat server
+      </h1>
+      <h3 class=welcome>
+        Version <span class="version">2.0</span>
+      </h3>
+      <div id="chat-messages"></div>
+    </div>
+    <div class="Control">
+      <input type="text" id="username" placeholder="Enter your username">
+      <input type="text" id="message" placeholder="Type your message">
+      <button id="sendButton">Send</button>
+      <button id="scrollLockButton">ScrollUnlock</button>
+    </div>
+    <div id="popup" class="popup-message">Error sending message!: <br>Reason: contains HTML</div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>

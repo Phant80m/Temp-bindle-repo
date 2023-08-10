@@ -8,11 +8,19 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 const messagesRouter = require('./routes/messages');
+app.use(express.static(__dirname + '/public'));
 
 // Mount the messages router under the /chat URL
 app.use('/chat', messagesRouter);
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'favicon.ico'));
+});
 // Serve the frontend at /chat
-app.use('/chat', express.static(path.join(__dirname, 'public')));
+const publicPath = path.join(__dirname, 'public');
+const chatHtmlPath = path.join(publicPath, 'chat.html');
+app.get('/chat', (req, res) => {
+  res.sendFile(chatHtmlPath);
+});
 
 // Socket.IO connection
 io.on('connection', (socket) => {
@@ -30,7 +38,10 @@ io.on('connection', (socket) => {
     const { username, message } = data;
 
     // Generate the current date and time
-    const timestamp = new Date().toLocaleString();
+    const timeZone = "Australia/Sydney";
+    const options = { timeZone: timeZone, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+    const formatter = new Intl.DateTimeFormat('en-AU', options);
+    const timestamp = formatter.format(new Date());
 
     // Save the message and emit it to all connected clients
     chat.saveMessage(username, message, timestamp)
