@@ -1,34 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/styles.css">
-    
-    <title>Indium Chat</title>
+
+    <title>Chat</title>
     <style>
     </style>
-  <body>
-    <div class="chat-container">
-      <h1 class="welcome">
-        Indium Anonymous Chat server
-      </h1>
-      <h3 class=welcome>
-        Version <span class="version">2.0</span>
-      </h3>
-      <div id="chat-messages"></div>
-    </div>
-    <div class="Control">
-      <input type="text" id="username" placeholder="Enter your username">
-      <input type="text" id="message" placeholder="Type your message">
-      <button id="sendButton">Send</button>
-      <button id="scrollLockButton">ScrollUnlock</button>
-    </div>
-    <div id="popup" class="popup-message">Error sending message!: <br>Reason: contains HTML</div>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/app.js"></script>
-  </body>
+
+    <body>
+        <div class="chat-container">
+            <h1 class="welcome">
+                Indium Anonymous Chat server
+            </h1>
+            <h3 class=welcome>
+                Version <span class="version">2.1</span>
+            </h3>
+            <button id="openDialogButton">show changelog</button>
+            <dialog id="myDialog">
+                <h1>Version 2.1 Changelog</h1>
+                <h3>Sercurity fixes:</h3>
+                <ul>
+                    <li>Disabled copy pasting.</li>
+                    <li>fixed some server side security</li>
+                    <li>messages don&#039;t render html</li>
+                    <li>html cant be abused in the dom</li>
+                </ul>
+                <h3>Quality of life:</h3>
+                <ul>
+                    <li>Fixed timestamps (only for Australia / Sydney)</li>
+                    <li>added some nice GUI improvements </li>
+                    <li>hover animations and nicer buttons</li>
+                    <li>Added nice box shadows to messages</li>
+                </ul>
+
+                <button id="closeDialog">Close</button>
+            </dialog>
+            <div id="chat-messages"></div>
+        </div>
+        <div class="Control">
+            <input type="text" id="username" placeholder="Enter your username">
+            <input type="text" id="message" placeholder="Type your message" autocomplete=off/>
+            <button id="sendButton">Send</button>
+            <button id="scrollLockButton">ScrollUnlock</button>
+        </div>
+        <div id="popup" class="popup-message">Error sending message!: <br>Reason: contains HTML</div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/app.js"></script>
+    </body>
+
 </html>

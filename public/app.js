@@ -3,14 +3,58 @@ function checkRedirectFromRoot() {
   const fromRoot = urlParams.get('fromRoot');
   if (fromRoot === 'true') {
     // User arrived from the root redirect, show a popup
-    showPopup('Redirect successful!', true);
+    showPopup('Redirected from / successfull!', true);
     // Store the information in sessionStorage to avoid showing the popup on reload
     sessionStorage.setItem('redirectedFromRoot', 'true');
   }
 }
+function handleVisibilityChange() {
+  if (document.hidden) {
+    // Page is not visible, change the title
+    document.title = "Come back to Chat!";
+  } else {
+    // Page is visible again, restore the original title
+    document.title = "Chat";
+  }
+}
+
+// Add event listener for visibility change
+document.addEventListener("visibilitychange", handleVisibilityChange);
+window.onload = function() {
+            var inputField = document.getElementById('message');
+
+            // Prevent context menu (right-click menu) from appearing
+            inputField.addEventListener('contextmenu', function(event) {
+                showPopup("Copying and pasting not allowed!");
+                event.preventDefault();
+            });
+
+            // Prevent copy and paste by intercepting key combinations
+            inputField.addEventListener('copy', function(event) {
+                showPopup("Copying not allowed!");
+                event.preventDefault();
+            });
+
+            inputField.addEventListener('paste', function(event) {
+                showPopup("Pasting not allowed!");
+                event.preventDefault();
+            });
+        }
+
+var myDialog = document.getElementById('myDialog');
+    var closeDialogButton = document.getElementById('closeDialog');
+
+    // Open the dialog when a button is clicked
+    document.getElementById('openDialogButton').addEventListener('click', function() {
+        myDialog.showModal();
+    });
+
+    // Close the dialog when the close button is clicked
+    closeDialogButton.addEventListener('click', function() {
+        myDialog.close();
+    });
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Check if the user was redirected from the root on the first visit
   const redirectedFromRoot = sessionStorage.getItem('redirectedFromRoot');
   if (redirectedFromRoot === null || redirectedFromRoot === 'true') {
     checkRedirectFromRoot();

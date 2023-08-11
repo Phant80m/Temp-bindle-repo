@@ -9,6 +9,40 @@
      font-family: 'Varela Round', sans-serif;
      overflow-x: hidden;
 }
+dialog {
+        width: 300px;
+        padding: 20px;
+        background-color: #181825;
+        border: 1px solid #181825;
+        color: #cdd6f4;
+        border-radius: 5px;
+        box-shadow: 2px 4px 134px 17px rgba(0,0,0,0.75);
+-webkit-box-shadow: 2px 4px 134px 17px rgba(0,0,0,0.75);
+-moz-box-shadow: 2px 4px 134px 17px rgba(0,0,0,0.75);
+    }
+dialog h3 {
+  color: #b4befe;
+}
+dialog h1 {
+  color: #b4befe;
+}
+dialog button {
+  cursor: pointer;  
+}
+
+#openDialogButton {
+  width: 10%;
+  text-align: center;
+  margin: 0 auto;
+  padding: 3px;
+  margin-bottom: 5%;
+  background: #89b4fa;
+  box-shadow: -2px 0px 36px 4px rgba(116,199,236,0.2);
+}
+#openDialogButton:hover {
+  background: #74c7ec;
+  cursor: pointer;
+}
  .welcome {
      color: white;
      text-align: center;
@@ -37,6 +71,7 @@
      word-wrap: break-word;
 }
  .message-wrapper {
+box-shadow: 17px 17px 58px -17px rgba(17,17,27,0.53);
      margin-bottom: 10px;
      padding: 8px;
      background-color: #181825;
