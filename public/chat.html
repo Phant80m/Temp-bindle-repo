@@ -14,29 +14,21 @@
     </style>
 
     <body>
-        <div class="chat-container">
-            <h1 class="welcome">
-                Indium Anonymous Chat server
+        <div class="welcome">
+            <h1>
+                    Indium Anonymous Chat server
             </h1>
-            <h3 class=welcome>
-                Version <span class="version">2.1</span>
+            <h3>
+                    Version <span class="version">2.25</span>
             </h3>
             <button id="openDialogButton">show changelog</button>
+        </div>
+        <div class="chat-container">
             <dialog id="myDialog">
-                <h1>Version 2.1 Changelog</h1>
+                <h1>Version 2.25 Changelog</h1>
                 <h3>Sercurity fixes:</h3>
                 <ul>
-                    <li>Disabled copy pasting.</li>
-                    <li>fixed some server side security</li>
-                    <li>messages don&#039;t render html</li>
-                    <li>html cant be abused in the dom</li>
-                </ul>
-                <h3>Quality of life:</h3>
-                <ul>
-                    <li>Fixed timestamps (only for Australia / Sydney)</li>
-                    <li>added some nice GUI improvements </li>
-                    <li>hover animations and nicer buttons</li>
-                    <li>Added nice box shadows to messages</li>
+                    <li>Message cooldown</li>
                 </ul>
 
                 <button id="closeDialog">Close</button>

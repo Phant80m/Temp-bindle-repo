@@ -18,7 +18,6 @@ function handleVisibilityChange() {
   }
 }
 
-// Add event listener for visibility change
 document.addEventListener("visibilitychange", handleVisibilityChange);
 window.onload = function() {
             var inputField = document.getElementById('message');
@@ -152,42 +151,67 @@ function showPopup(message, isRedirect = false) {
     popup.style.opacity = '0';
   }, 3000); // Hide the popup after 3 seconds
 }
+// Add an object to track the last sent message and timestamp for each user
+const lastSentMessages = {};
+let lastMessageTimestamp = 0;
+// ... (other code remains the same)
 
-      // Function to send a message to the server
-      function sendMessage() {
-        let isOnCooldown = false;
-        // Check if the user is currently on cooldown
-        if (isOnCooldown) {
-          return; // Exit the function without sending the message
-        }
-        const username = usernameInput.value.trim().slice(0, maxUsernameLength);
-        let message = messageInput.value.trim().slice(0, maxMessageLength);
-        if (username && message) {
-        const linkPattern = /(https?:\/\/[^\s]+\.(com|net|co)[^\s]*)/g;
-          const htmlTagsRegex = /<\s*\/?\s*[a-zA-Z]+\s*[^<>]*\s*>/g;
-          if (!linkPattern.test(message)) {
-            // Check if the message contains HTML tags or ending tags
-            if (htmlTagsRegex.test(message)) {
-              showPopup('Message not sent: contains HTML');
-              return; // Exit the function without sending the message
-            }
-            socket.emit('sendMessage', {
-              username,
-              message
-            });
-            messageInput.value = '';
-            // Set the cooldown flag to true
-            isOnCooldown = true;
-            // Reset the cooldown flag after 0.2 seconds
-            setTimeout(() => {
-              isOnCooldown = false;
-            }, 200);
-          } else {
-            showPopup('Messages containing links are not allowed.');
-          }
-        }
-      }
-      // Handle new messages from the server
+// Modify the sendMessage function
+function sendMessage() {
+  const currentTime = Date.now();
+  const elapsedSeconds = (currentTime - lastMessageTimestamp) / 1000;
+
+  const username = usernameInput.value.trim().slice(0, maxUsernameLength);
+  const message = messageInput.value.trim().slice(0, maxMessageLength);
+    const lastMessageForUser = lastSentMessages[username];
+    const lastTimestampForUser = lastMessageForUser ? lastMessageForUser.timestamp : 0;
+
+
+  // If less than 1 second has passed, show a cooldown popup
+    if (lastMessageForUser && lastMessageForUser.message === message) {
+      showPopup("Message not sent: same as previous message");
+      return;
+    }
+  if (elapsedSeconds < 1) {
+    showPopup('Please wait at least 1 second between messages.');
+    return;
+  }
+
+  // Check if the message is the same as the previous message for this user
+  if (username && message) {
+    const linkPattern = /(https?:\/\/[^\s]+\.(com|net|co)[^\s]*)/g;
+    const htmlTagsRegex = /<\s*\/?\s*[a-zA-Z]+\s*[^<>]*\s*>/g;
+
+    if (htmlTagsRegex.test(message)) {
+      showPopup('Message not sent: contains HTML');
+      return; // Exit the function without sending the message
+    }
+
+    if (linkPattern.test(message)) {
+      showPopup('Messages containing links are not allowed.');
+      return; // Exit the function without sending the message
+    }
+
+    socket.emit('sendMessage', {
+      username,
+      message
+    });
+
+    lastSentMessages[username] = {
+      message,
+      timestamp: currentTime
+    };
+
+    lastMessageTimestamp = currentTime;
+
+    messageInput.value = '';
+
+    setTimeout(() => {
+      lastSentMessages[username] = null;
+    }, 1000); // 1 second cooldown
+  }
+}
+
       socket.on('newMessage', ({
         username,
         message,
