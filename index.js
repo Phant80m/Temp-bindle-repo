@@ -1,4 +1,5 @@
 const express = require('express');
+const fs = require('fs');
 const http = require('http');
 const socketIO = require('socket.io');
 const path = require('path');
@@ -32,6 +33,38 @@ io.on('connection', (socket) => {
     .catch((err) => {
       console.error('Error loading messages:', err);
     });
+  const userIP = socket.handshake.address;
+
+  // Log the user's IP address
+  console.log(`User connected with IP address: ${userIP}`);
+  
+  const timeZone = "Australia/Sydney";
+  const options = { timeZone: timeZone, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+  const formatter = new Intl.DateTimeFormat('en-AU', options);
+  const timestamp = formatter.format(new Date());
+
+  // Create a log object
+  const logEntry = {
+    ip: userIP,
+    timestamp: timestamp
+  };
+
+  // Write the log to the file
+  fs.readFile('./data/iplog.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading iplog.json:', err);
+      return;
+    }
+
+    const ipLog = JSON.parse(data);
+    ipLog.push(logEntry);
+
+    fs.writeFile('./data/iplog.json', JSON.stringify(ipLog, null, 2), (err) => {
+      if (err) {
+        console.error('Error writing iplog.json:', err);
+      }
+    });
+  });
 
   // Listen for new messages
   socket.on('sendMessage', (data) => {
