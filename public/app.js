@@ -224,3 +224,33 @@ socket.on('newMessage', ({
         scrollingElement.scrollTop = scrollingElement.scrollHeight;
     }
 });
+// Fetch version data from the server
+fetch('/version')
+  .then(response => response.json())
+  .then(data => {
+    // Update version number
+    document.querySelector('.version').textContent = data.version;
+
+    // Update changelog
+    const changelog = data.changelog;
+    const changelogDialog = document.querySelector('#myDialog');
+    changelogDialog.querySelector('h1').textContent = `Version ${data.version} Changelog`;
+
+    Object.keys(changelog).forEach(key => {
+      const changes = changelog[key].changes;
+      const listItem = document.createElement('li');
+      listItem.textContent = changes;
+      changelogDialog.querySelector('ul').appendChild(listItem);
+    });
+  })
+  .catch(error => {
+    console.error('Error fetching version data:', error);
+  });
+
+// Show or hide changelog dialog on Control + C
+document.addEventListener('keydown', function(event) {
+  if (event.ctrlKey && event.key === 'c') {
+    const changelogDialog = document.querySelector('#myDialog');
+    changelogDialog.toggleAttribute('open');
+  }
+});

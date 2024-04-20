@@ -1,0 +1,10 @@
+version = "2.2.5"
+
+[changelog."one"]
+changes = "example" 
+
+[changelog."two"]
+changes = "example"
+
+[changelog."three"]
+changes = "example"
